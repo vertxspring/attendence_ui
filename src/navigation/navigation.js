@@ -3,7 +3,7 @@
 import { Navigation } from 'react-native-navigation';
 import registerScreens from './registerScreens';
 import * as screens from './screens';
-
+import {AsyncStorage} from 'react-native';
 // Register all screens on launch
 registerScreens();
 
@@ -44,7 +44,7 @@ export function pushLoadingScreen() {
       stack: {
         children: [{
           component: {
-            name: screens.COUNTER_SCREEN,
+            name: screens.INITIALIZING_SCREEN,
             options: {
               topBar: {
                 visible: false,
@@ -58,4 +58,44 @@ export function pushLoadingScreen() {
       }
     }
   });
-}
+
+  loadRelaventScreen();
+
+  };
+  
+  
+  loadRelaventScreen = async () => {
+    
+      const jwt = await AsyncStorage.getItem('jwt');
+      
+      
+      if (!jwt) {
+        Navigation.setRoot({
+          root: {
+            stack: {
+              children: [{
+                component: {
+                  name: screens.LOGIN_SCREEN,
+                  options: {
+                    topBar: {
+                      visible: false,
+                    },
+                    statusBar: {
+                      style: 'dark'
+                    }
+                  }
+                }
+              }]
+            }
+          }
+        });
+
+        return;
+      }
+
+      const role = await AsyncStorage.getItem('role');
+
+    
+  };
+
+  
